@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<title>Spin & Win Telugu</title>
+<style>
+body{
+text-align:center;
+font-family:Arial;
+background:linear-gradient(45deg,#ff6a00,#ffcc00);
+color:white;
+}
+#gameBox{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+margin-top:40px;
+flex-wrap:wrap;
+}
+#medha{
+width:180px;
+border-radius:20px;
+box-shadow:0 0 20px gold;
+}
+#wheelBox{position:relative;}
+#wheel{
+width:300px;
+height:300px;
+border-radius:50%;
+border:10px solid white;
+background:conic-gradient(
+red 0deg 60deg,
+yellow 60deg 120deg,
+green 120deg 180deg,
+blue 180deg 240deg,
+pink 240deg 300deg,
+purple 300deg 360deg
+);
+transition:transform 4s ease-out;
+}
+#pointer{
+position:absolute;
+top:-10px;
+left:140px;
+font-size:40px;
+}
+button{
+margin-top:20px;
+padding:15px 30px;
+font-size:22px;
+background:#ff0000;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+#winner{font-size:26px;margin-top:20px;}
+</style>
+</head>
+
+<body>
+
+<h1>🎡 Spin & Win Telugu</h1>
+
+<div id="gameBox">
+<img id="medha" src="medha.png">
+<div id="wheelBox">
+<div id="pointer">⬇</div>
+<div id="wheel"></div>
+</div>
+</div>
+
+<button onclick="spin()">SPIN</button>
+<div id="winner"></div>
+
+<script>
+let prizes=[
+"₹10 Gift",
+"Chocolate",
+"Better Luck",
+"₹50 Coupon",
+"Free Spin",
+"Mobile Recharge"
+];
+
+function spin(){
+let wheel=document.getElementById("wheel");
+let deg=Math.floor(Math.random()*3600);
+wheel.style.transform="rotate("+deg+"deg)";
+let prize=prizes[Math.floor(Math.random()*prizes.length)];
+setTimeout(()=>{
+document.getElementById("winner").innerHTML="🎉 మీరు గెలిచింది: "+prize;
+},4000);
+}
+</script>
+
+</body>
+</html>
