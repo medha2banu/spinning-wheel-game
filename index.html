@@ -2,28 +2,48 @@
 <html lang="te">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Spin & Win Telugu</title>
+
 <style>
 body{
 text-align:center;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:linear-gradient(45deg,#ff6a00,#ffcc00);
 color:white;
+margin:0;
+padding:20px;
 }
+
+h1{
+margin-top:10px;
+}
+
+#userid{
+margin-top:5px;
+font-size:14px;
+opacity:0.9;
+}
+
 #gameBox{
 display:flex;
 justify-content:center;
 align-items:center;
 gap:40px;
-margin-top:40px;
+margin-top:30px;
 flex-wrap:wrap;
 }
+
 #medha{
 width:180px;
 border-radius:20px;
 box-shadow:0 0 20px gold;
 }
-#wheelBox{position:relative;}
+
+#wheelBox{
+position:relative;
+}
+
 #wheel{
 width:300px;
 height:300px;
@@ -39,12 +59,14 @@ purple 300deg 360deg
 );
 transition:transform 4s ease-out;
 }
+
 #pointer{
 position:absolute;
 top:-10px;
 left:140px;
 font-size:40px;
 }
+
 button{
 margin-top:20px;
 padding:15px 30px;
@@ -55,44 +77,89 @@ border:none;
 border-radius:10px;
 cursor:pointer;
 }
-#winner{font-size:26px;margin-top:20px;}
+
+#winner{
+font-size:26px;
+margin-top:20px;
+}
 </style>
 </head>
 
 <body>
 
-<h1>🎡 Spin & Win Telugu</h1>
+<h1>馃帯 Spin & Win Telugu</h1>
+<div id="userid"></div>
 
 <div id="gameBox">
+
 <img id="medha" src="medha.png">
+
 <div id="wheelBox">
-<div id="pointer">⬇</div>
+<div id="pointer">猬�</div>
 <div id="wheel"></div>
 </div>
+
 </div>
 
 <button onclick="spin()">SPIN</button>
+
 <div id="winner"></div>
 
+<audio id="spinSound">
+<source src="spin_sound.mp3" type="audio/mpeg">
+</audio>
+
 <script>
+
+// USER ID SYSTEM
+function getUserID(){
+
+let userID = localStorage.getItem("userID");
+
+if(!userID){
+
+userID = "USER_" + Math.floor(Math.random()*1000000);
+localStorage.setItem("userID", userID);
+
+}
+
+return userID;
+
+}
+
+let id = getUserID();
+document.getElementById("userid").innerText = "Your ID: " + id;
+
+
+// PRIZES
 let prizes=[
-"₹10 Gift",
+"鈧�10 Gift",
 "Chocolate",
 "Better Luck",
-"₹50 Coupon",
+"鈧�50 Coupon",
 "Free Spin",
 "Mobile Recharge"
 ];
 
+
+// SPIN FUNCTION
 function spin(){
+
 let wheel=document.getElementById("wheel");
 let deg=Math.floor(Math.random()*3600);
+
+document.getElementById("spinSound").play();
+
 wheel.style.transform="rotate("+deg+"deg)";
+
 let prize=prizes[Math.floor(Math.random()*prizes.length)];
+
 setTimeout(()=>{
-document.getElementById("winner").innerHTML="🎉 మీరు గెలిచింది: "+prize;
+document.getElementById("winner").innerHTML="馃帀 喟眬喟班眮 喟椸眴喟侧翱喟氞翱喟傕唉喟�: "+prize;
 },4000);
+
 }
+
 </script>
 
 </body>
