@@ -1,162 +1,241 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spin & Win Telugu</title>
+<title>Spin & Win India</title>
 
 <style>
+
 body{
+font-family:Arial;
 text-align:center;
-font-family:Arial, sans-serif;
-background:linear-gradient(45deg,#ff6a00,#ffcc00);
+background:#111;
 color:white;
 margin:0;
+padding:0;
+}
+
+header{
 padding:20px;
 }
 
+.logo{
+width:120px;
+}
+
 h1{
-margin-top:10px;
+color:#ffcc00;
 }
 
-#userid{
-margin-top:5px;
-font-size:14px;
-opacity:0.9;
-}
-
-#gameBox{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:40px;
-margin-top:30px;
-flex-wrap:wrap;
-}
-
-#medha{
-width:180px;
-border-radius:20px;
-box-shadow:0 0 20px gold;
-}
-
-#wheelBox{
-position:relative;
+.container{
+margin-top:20px;
 }
 
 #wheel{
-width:300px;
-height:300px;
+width:260px;
+height:260px;
 border-radius:50%;
-border:10px solid white;
+border:10px solid #fff;
+margin:auto;
 background:conic-gradient(
-red 0deg 60deg,
-yellow 60deg 120deg,
-green 120deg 180deg,
-blue 180deg 240deg,
-pink 240deg 300deg,
-purple 300deg 360deg
+#ff5722 0deg 60deg,
+#4caf50 60deg 120deg,
+#2196f3 120deg 180deg,
+#ffeb3b 180deg 240deg,
+#9c27b0 240deg 300deg,
+#00bcd4 300deg 360deg
 );
 transition:transform 4s ease-out;
 }
 
-#pointer{
-position:absolute;
-top:-10px;
-left:140px;
-font-size:40px;
+.pointer{
+font-size:30px;
 }
 
 button{
-margin-top:20px;
-padding:15px 30px;
-font-size:22px;
-background:#ff0000;
-color:white;
+padding:12px 25px;
+font-size:18px;
+background:#ff9800;
 border:none;
-border-radius:10px;
+border-radius:8px;
+color:white;
 cursor:pointer;
+margin-top:15px;
 }
 
-#winner{
-font-size:26px;
-margin-top:20px;
+button:hover{
+background:#ff5722;
 }
+
+.coins{
+font-size:20px;
+margin-top:10px;
+}
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+align-items:center;
+justify-content:center;
+}
+
+.popup-content{
+background:#222;
+padding:30px;
+border-radius:10px;
+}
+
+.menu{
+margin-top:25px;
+}
+
+.menu button{
+margin:5px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>馃帯 Spin & Win Telugu</h1>
-<div id="userid"></div>
+<header>
 
-<div id="gameBox">
+<img src="swilogo.png" class="logo">
 
-<img id="medha" src="medha.png">
+<h1>Spin & Win India 🇮🇳</h1>
 
-<div id="wheelBox">
-<div id="pointer">猬�</div>
+<p>Play Games • Win Rewards • Daily Bonus</p>
+
+</header>
+
+<div class="coins">
+Coins: <span id="coins">100</span>
+</div>
+
+<div class="container">
+
+<div class="pointer">🔻</div>
+
 <div id="wheel"></div>
-</div>
+
+<button onclick="spin()">SPIN (10 Coins)</button>
 
 </div>
 
-<button onclick="spin()">SPIN</button>
+<div class="menu">
 
-<div id="winner"></div>
+<button onclick="dailyBonus()">🎁 Daily Bonus</button>
 
-<audio id="spinSound">
-<source src="spin_sound.mp3" type="audio/mpeg">
-</audio>
+<button onclick="alert('Scratch Card coming soon')">🎫 Scratch Card</button>
+
+<button onclick="alert('Lucky Number coming soon')">🔢 Lucky Number</button>
+
+</div>
+
+<audio id="spinSound" src="spin_sound.mp3"></audio>
+
+<div class="popup" id="popup">
+<div class="popup-content">
+
+<h2 id="resultText"></h2>
+
+<button onclick="closePopup()">OK</button>
+
+</div>
+</div>
 
 <script>
 
-// USER ID SYSTEM
-function getUserID(){
+let wheel=document.getElementById("wheel");
+let coins=parseInt(localStorage.getItem("coins")) || 100;
+document.getElementById("coins").innerText=coins;
 
-let userID = localStorage.getItem("userID");
+let rewards=[5,0,0,10,0,0,20,0,15,0,0,0,50];
 
-if(!userID){
-
-userID = "USER_" + Math.floor(Math.random()*1000000);
-localStorage.setItem("userID", userID);
-
-}
-
-return userID;
-
-}
-
-let id = getUserID();
-document.getElementById("userid").innerText = "Your ID: " + id;
-
-
-// PRIZES
-let prizes=[
-"鈧�10 Gift",
-"Chocolate",
-"Better Luck",
-"鈧�50 Coupon",
-"Free Spin",
-"Mobile Recharge"
-];
-
-
-// SPIN FUNCTION
 function spin(){
 
-let wheel=document.getElementById("wheel");
-let deg=Math.floor(Math.random()*3600);
+if(coins<10){
 
-document.getElementById("spinSound").play();
+alert("Not enough coins!");
+
+return;
+
+}
+
+coins-=10;
+updateCoins();
+
+let sound=document.getElementById("spinSound");
+sound.play();
+
+let rand=Math.floor(Math.random()*rewards.length);
+let deg=rand*60+720;
 
 wheel.style.transform="rotate("+deg+"deg)";
 
-let prize=prizes[Math.floor(Math.random()*prizes.length)];
-
 setTimeout(()=>{
-document.getElementById("winner").innerHTML="馃帀 喟眬喟班眮 喟椸眴喟侧翱喟氞翱喟傕唉喟�: "+prize;
+
+let reward=rewards[rand];
+
+coins+=reward;
+
+updateCoins();
+
+showPopup("🎉 You won "+reward+" coins!");
+
 },4000);
+
+}
+
+function updateCoins(){
+
+document.getElementById("coins").innerText=coins;
+
+localStorage.setItem("coins",coins);
+
+}
+
+function showPopup(text){
+
+document.getElementById("resultText").innerText=text;
+
+document.getElementById("popup").style.display="flex";
+
+}
+
+function closePopup(){
+
+document.getElementById("popup").style.display="none";
+
+}
+
+function dailyBonus(){
+
+let today=new Date().toDateString();
+
+let last=localStorage.getItem("daily");
+
+if(last==today){
+
+alert("Today's bonus already claimed!");
+
+return;
+
+}
+
+coins+=20;
+
+updateCoins();
+
+localStorage.setItem("daily",today);
+
+alert("🎁 Daily Bonus: 20 coins");
 
 }
 
